@@ -7,9 +7,9 @@ int main(int argc, const char** argv)
 	sf::Event event;
 	sf::Clock clock;
 
-	window.setFramerateLimit(60);
+	window.setFramerateLimit(30);
 
-	Field field({100, 100}, 4);
+	Field field({ 500, 500 }, 2);
 	field.init();
 	field.setPosition(0, 0);
 
@@ -19,10 +19,18 @@ int main(int argc, const char** argv)
 	fpsText.setFont(terminal);
 	fpsText.setFillColor(sf::Color::White);
 	fpsText.setOutlineColor(sf::Color::Black);
+	fpsText.setOutlineThickness(2);
 	fpsText.setPosition(0, 0);
+
+	bool mousePressed = false;
+
+	float cameraScale = 1.f;
+
+	sf::View ui = window.getView();
 
 	while (window.isOpen())
 	{
+		sf::View gameView = window.getView();
 		while (window.pollEvent(event))
 		{
 			switch (event.type)
@@ -38,14 +46,38 @@ int main(int argc, const char** argv)
 					static_cast<float>(event.size.width),
 					static_cast<float>(event.size.height)
 				);
-				window.setView(sf::View(visibleArea));
+				gameView = sf::View(visibleArea);
+				ui = sf::View(visibleArea);
+				window.setView(gameView);
 				break;
 			}
 			case sf::Event::MouseWheelScrolled:
 			{
-				sf::View view = window.getView();
-				view.zoom(event.mouseWheelScroll.delta >  0 ? (0.9f) : (1.1f));
-				window.setView(view);
+				float scale = event.mouseWheelScroll.delta > 0 ? (0.9f) : (1.1f);
+				gameView.zoom(scale);
+				cameraScale *= scale;
+				window.setView(gameView);
+				break;
+			}
+			case sf::Event::MouseButtonPressed:
+				mousePressed = true;
+				break;
+			case sf::Event::MouseButtonReleased:
+				mousePressed = false;
+				break;
+			case sf::Event::MouseMoved:
+			{
+				static sf::Vector2f lastMousePos;
+				float x = event.mouseMove.x;
+				float y = event.mouseMove.y;
+				if (mousePressed)
+				{
+					gameView.move((lastMousePos.x - x) * cameraScale,(lastMousePos.y - y) * cameraScale);
+					window.setView(gameView);
+				}
+				lastMousePos.x = x;
+				lastMousePos.y = y;
+				break;
 			}
 			default:
 				break;
@@ -54,17 +86,17 @@ int main(int argc, const char** argv)
 
 		field.step();
 
-		fpsText.setString("FPS: " + std::to_string(sf::seconds(1.f).asMilliseconds() / clock.getElapsedTime().asMilliseconds()));
+		fpsText.setString("FPS: " + std::to_string(1.f / clock.getElapsedTime().asSeconds()));
 
 		window.clear();
 		window.draw(field);
 		{
 			sf::View view = window.getView();
-			window.setView(window.getDefaultView());
+			window.setView(ui);
 			window.draw(fpsText);
 			window.setView(view);
 		}
-		window.display();
 		clock.restart();
+		window.display();
 	}
 }
