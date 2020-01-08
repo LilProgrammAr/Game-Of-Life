@@ -86,7 +86,7 @@ else()
 endif()
 
 # define the sfml-system target
-add_library(sfml-system SHARED
+sfml_add_library(sfml-system
                  SOURCES ${SRC} ${PLATFORM_SRC})
 
 # setup dependencies

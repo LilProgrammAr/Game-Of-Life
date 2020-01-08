@@ -1,5 +1,6 @@
 
 # include the SFML specific macros
+include(${PROJECT_SOURCE_DIR}/cmake/Macros.cmake)
 
 # let CMake know about our additional libraries paths
 if (SFML_OS_WINDOWS)
@@ -41,11 +42,6 @@ endif()
 # define the path of our additional CMake modules
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/Modules/")
 
-# set the output directory for SFML libraries
-set(LIBRARY_OUTPUT_PATH "${PROJECT_BINARY_DIR}/lib")
-
-# add the modules subdirectories
-
 # sfml-system
 add_subdirectory(System)
 
@@ -59,17 +55,14 @@ if(SFML_BUILD_WINDOW OR SFML_BUILD_GRAPHICS)
     add_subdirectory(Window)
 endif()
 
-# sfml-network
-if(SFML_BUILD_NETWORK)
-    add_subdirectory(Network)
-endif()
-
 # sfml-graphics
 if(SFML_BUILD_GRAPHICS)
     add_subdirectory(Graphics)
 endif()
 
-# sfml-audio
-if(SFML_BUILD_AUDIO)
-    add_subdirectory(Audio)
-endif()
+set_target_properties( sfml-system sfml-window sfml-graphics sfml-main
+    PROPERTIES
+    ARCHIVE_OUTPUT_DIRECTORY "${SOLUTION_DIR}/lib"
+    LIBRARY_OUTPUT_DIRECTORY "${SOLUTION_DIR}/lib"
+    RUNTIME_OUTPUT_DIRECTORY "${SOLUTION_DIR}/bin"
+)

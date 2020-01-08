@@ -14,11 +14,8 @@
 # EXTERNAL cache entries
 ########################
 
-//TRUE to build SFML as shared libraries, FALSE to build it as
-// static libraries
-BUILD_SHARED_LIBS:BOOL=TRUE
-
-//Choose the type of build (Debug or Release)
+//Choose the type of build, options are: None Debug Release RelWithDebInfo
+// MinSizeRel ...
 CMAKE_BUILD_TYPE:STRING=Debug
 
 //No help, variable specified on the command line.
@@ -123,7 +120,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=GameOfLife-cmake
+CMAKE_PROJECT_NAME:STATIC=GameOfLife
 
 //RC compiler
 CMAKE_RC_COMPILER:FILEPATH=C:/Program Files (x86)/Windows Kits/10/bin/10.0.18362.0/x64/rc.exe
@@ -196,55 +193,41 @@ CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
-//Value Computed by CMake
-GameOfLife-cmake_BINARY_DIR:STATIC=C:/Users/sergs/source/repos/GameOfLife/out/build/x64-Debug
+//Path to a file.
+FREETYPE_INCLUDE_DIR_freetype2:PATH=C:/Users/sergs/source/repos/GameOfLife/SFML/extlibs/headers/freetype2
+
+//Path to a file.
+FREETYPE_INCLUDE_DIR_ft2build:PATH=C:/Users/sergs/source/repos/GameOfLife/SFML/extlibs/headers/freetype2
+
+//Path to a library.
+FREETYPE_LIBRARY:FILEPATH=C:/Users/sergs/source/repos/GameOfLife/SFML/extlibs/libs-msvc-universal/x64/freetype.lib
 
 //Value Computed by CMake
-GameOfLife-cmake_SOURCE_DIR:STATIC=C:/Users/sergs/source/repos/GameOfLife
+GameOfLife_BINARY_DIR:STATIC=C:/Users/sergs/source/repos/GameOfLife/out/build/x64-Debug/GameOfLife
 
 //Value Computed by CMake
-GameOfLife_BINARY_DIR:STATIC=C:/Users/sergs/source/repos/GameOfLife/out/build/x64-Debug/GameOfLife-cmake
+GameOfLife_SOURCE_DIR:STATIC=C:/Users/sergs/source/repos/GameOfLife/GameOfLife
 
-//Value Computed by CMake
-GameOfLife_SOURCE_DIR:STATIC=C:/Users/sergs/source/repos/GameOfLife/GameOfLife-cmake
+//OpenGL library for win32
+OPENGL_gl_LIBRARY:STRING=opengl32
+
+//GLU library for win32
+OPENGL_glu_LIBRARY:STRING=glu32
 
 //Value Computed by CMake
 SFML_BINARY_DIR:STATIC=C:/Users/sergs/source/repos/GameOfLife/out/build/x64-Debug/SFML
 
-//TRUE to build SFML's Audio module.
-SFML_BUILD_AUDIO:BOOL=TRUE
-
-//TRUE to generate the API documentation, FALSE to ignore it
-SFML_BUILD_DOC:BOOL=FALSE
-
-//TRUE to build the SFML examples, FALSE to ignore them
-SFML_BUILD_EXAMPLES:BOOL=FALSE
-
-//TRUE to build SFML's Graphics module.
-SFML_BUILD_GRAPHICS:BOOL=TRUE
-
-//TRUE to build SFML's Network module.
-SFML_BUILD_NETWORK:BOOL=TRUE
-
-//TRUE to build SFML's Window module. This setting is ignored,
-// if the graphics module is built.
-SFML_BUILD_WINDOW:BOOL=TRUE
-
-//External libraries (FLAC, Freetype, Vorbis, ...) installation
-// directory
-SFML_DEPENDENCIES_INSTALL_PREFIX:PATH=.
-
-//Prefix installation path for miscellaneous files
-SFML_MISC_INSTALL_PREFIX:PATH=
-
 //Value Computed by CMake
 SFML_SOURCE_DIR:STATIC=C:/Users/sergs/source/repos/GameOfLife/SFML
 
-//TRUE to use system dependencies, FALSE to use the bundled ones.
-SFML_USE_SYSTEM_DEPS:BOOL=FALSE
+//Dependencies for the target
+sfml-graphics_LIB_DEPENDS:STATIC=general;sfml-window;
 
 //Dependencies for the target
-sfml-window_LIB_DEPENDS:STATIC=general;sfml-system;
+sfml-system_LIB_DEPENDS:STATIC=general;winmm;
+
+//Dependencies for the target
+sfml-window_LIB_DEPENDS:STATIC=general;sfml-system;general;winmm;general;gdi32;
 
 
 ########################
@@ -335,7 +318,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_MT
 CMAKE_MT-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=5
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=8
 //Platform information initialized
 CMAKE_PLATFORM_INFO_INITIALIZED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_RC_COMPILER
@@ -379,4 +362,26 @@ CMAKE_STATIC_LINKER_FLAGS_RELEASE-ADVANCED:INTERNAL=1
 CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
+//Details about finding OpenGL
+FIND_PACKAGE_MESSAGE_DETAILS_OpenGL:INTERNAL=[opengl32][c ][v()]
+//ADVANCED property for variable: FREETYPE_INCLUDE_DIR_freetype2
+FREETYPE_INCLUDE_DIR_freetype2-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: FREETYPE_INCLUDE_DIR_ft2build
+FREETYPE_INCLUDE_DIR_ft2build-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: FREETYPE_LIBRARY
+FREETYPE_LIBRARY-ADVANCED:INTERNAL=1
+//Result of TRY_COMPILE
+HAVE_SIZEOF_VOID_PTR:INTERNAL=TRUE
+//Have include stddef.h
+HAVE_STDDEF_H:INTERNAL=1
+//Have include stdint.h
+HAVE_STDINT_H:INTERNAL=1
+//Have include sys/types.h
+HAVE_SYS_TYPES_H:INTERNAL=1
+//ADVANCED property for variable: OPENGL_gl_LIBRARY
+OPENGL_gl_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: OPENGL_glu_LIBRARY
+OPENGL_glu_LIBRARY-ADVANCED:INTERNAL=1
+//CHECK_TYPE_SIZE: sizeof(void*)
+SIZEOF_VOID_PTR:INTERNAL=8
 

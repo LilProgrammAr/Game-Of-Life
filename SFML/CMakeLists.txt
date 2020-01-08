@@ -1,22 +1,14 @@
 # CMake's built-in Android support requires 3.7.0
-if(CMAKE_SYSTEM_NAME MATCHES "Android")
-    cmake_minimum_required(VERSION 3.7.2)
-else()
-    cmake_minimum_required(VERSION 3.0.2)
-endif()
-
-# define a macro that helps defining an option
-macro(sfml_set_option var default type docstring)
-    if(NOT DEFINED ${var})
-        set(${var} ${default})
-    endif()
-    set(${var} ${${var}} CACHE ${type} ${docstring} FORCE)
-endmacro()
+cmake_minimum_required(VERSION 3.8)
 
 # these options have to be set before CMake detects/configures the toolchain
 
 # determine whether to create a debug or release build
-sfml_set_option(CMAKE_BUILD_TYPE Release STRING "Choose the type of build (Debug or Release)")
+if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    set(CMAKE_BUILD_TYPE Debug)
+else()
+    set(CMAKE_BUILD_TYPE Release)
+endif()
 
 # Suppress Cygwin legacy warning
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
@@ -44,15 +36,19 @@ endif()
 # project name
 project(SFML)
 
+set(PROJECT_BINARY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+
+# include the configuration file
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Config.cmake)
+
 # setup version numbers
 set(VERSION_MAJOR 2)
 set(VERSION_MINOR 5)
 set(VERSION_PATCH 1)
 
 # add an option for choosing the build type (shared or static)
-if(NOT (SFML_OS_IOS OR SFML_OS_ANDROID))
-    sfml_set_option(BUILD_SHARED_LIBS TRUE BOOL "TRUE to build SFML as shared libraries, FALSE to build it as static libraries")
-else()
+set(BUILD_SHARED_LIBS TRUE)
+if(SFML_OS_IOS OR SFML_OS_ANDROID)
     if(SFML_OS_IOS)
         set(BUILD_SHARED_LIBS FALSE)
     elseif(SFML_OS_ANDROID)
@@ -60,26 +56,23 @@ else()
     endif()
 endif()
 
-# add an option for building the examples
-if(NOT SFML_OS_ANDROID)
-    sfml_set_option(SFML_BUILD_EXAMPLES FALSE BOOL "TRUE to build the SFML examples, FALSE to ignore them")
-else()
-    set(SFML_BUILD_EXAMPLES FALSE)
-endif()
+set(SFML_BUILD_GRAPHICS TRUE)
+set(SFML_BUILD_WINDOW TRUE)
+
 
 # Mac OS X specific options
 if(SFML_OS_MACOSX)
     # add an option to build frameworks instead of dylibs (release only)
-    sfml_set_option(SFML_BUILD_FRAMEWORKS FALSE BOOL "TRUE to build SFML as frameworks libraries (release only), FALSE to build according to BUILD_SHARED_LIBS")
+    set(SFML_BUILD_FRAMEWORKS FALSE)
 
     # add an option to let the user specify a custom directory for external frameworks installation
-    sfml_set_option(SFML_DEPENDENCIES_INSTALL_PREFIX "/Library/Frameworks" PATH "External frameworks (FLAC, Freetype, Vorbis, ...) installation directory")
+    set(SFML_DEPENDENCIES_INSTALL_PREFIX "/Library/Frameworks")
 
     # add an option to automatically install Xcode templates
-    sfml_set_option(SFML_INSTALL_XCODE_TEMPLATES FALSE BOOL "TRUE to automatically install the Xcode templates, FALSE to do nothing about it. The templates are compatible with Xcode 4 and 5.")
+    set(SFML_INSTALL_XCODE_TEMPLATES FALSE)
 else()
     # add an option to let the user specify a custom directory for external libraries installation
-    sfml_set_option(SFML_DEPENDENCIES_INSTALL_PREFIX "." PATH "External libraries (FLAC, Freetype, Vorbis, ...) installation directory")
+    set(SFML_DEPENDENCIES_INSTALL_PREFIX ".")
 endif()
 
 # Android options
@@ -131,19 +124,12 @@ elseif(SFML_OS_ANDROID)
     set(DEFAULT_INSTALL_MISC_DIR ${CMAKE_ANDROID_NDK}/sources/third_party/sfml)
 endif()
 # add an option to let the user specify a custom directory for doc, examples, licence, readme and other miscellaneous files
-sfml_set_option(SFML_MISC_INSTALL_PREFIX "${DEFAULT_INSTALL_MISC_DIR}" PATH "Prefix installation path for miscellaneous files")
-
-
-# force building sfml-window, if sfml-graphics module is built
-if(SFML_BUILD_GRAPHICS AND NOT SFML_BUILD_WINDOW)
-    message(WARNING "You're trying to build SFML's Graphics module without the Window module. Forcing building of the Window module as a dependency.")
-    set(SFML_BUILD_WINDOW TRUE)
-endif()
+set(SFML_MISC_INSTALL_PREFIX "${DEFAULT_INSTALL_MISC_DIR}")
 
 # allow not using bundled dependencies with a switch
 # (except for stb_image)
 # yes this is horrible, but GLOB_RECURSE sucks
-sfml_set_option(SFML_USE_SYSTEM_DEPS FALSE BOOL "TRUE to use system dependencies, FALSE to use the bundled ones.")
+set(SFML_USE_SYSTEM_DEPS FALSE)
 if(SFML_USE_SYSTEM_DEPS)
     if(SFML_INSTALL_XCODE_TEMPLATES)
         message(FATAL_ERROR "XCode templates installation cannot be used with the SFML_USE_SYSTEM_DEPS option (the bundled frameworks are required.)")
@@ -177,12 +163,9 @@ endif()
 if(SFML_COMPILER_MSVC)
     # add an option to choose whether PDB debug symbols should be generated (defaults to true when possible)
     if(CMAKE_VERSION VERSION_LESS 3.1)
-        sfml_set_option(SFML_GENERATE_PDB FALSE BOOL "True to generate PDB debug symbols, FALSE otherwise. Requires CMake 3.1.")
-        if(SFML_GENERATE_PDB)
-            message(FATAL_ERROR "Generation of PDB files (SFML_GENERATE_PDB) requires at least CMake 3.1.0")
-        endif()
+        message(FATAL_ERROR "Generation of PDB files (SFML_GENERATE_PDB) requires at least CMake 3.1.0")
     else()
-        sfml_set_option(SFML_GENERATE_PDB TRUE BOOL "True to generate PDB debug symbols, FALSE otherwise. Requires CMake 3.1.")
+        set(SFML_GENERATE_PDB TRUE)
     endif()
 
     add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_SCL_SECURE_NO_WARNINGS)
@@ -196,7 +179,7 @@ endif()
 
 # define an option for choosing between static and dynamic C runtime (Windows only)
 if(SFML_OS_WINDOWS)
-    sfml_set_option(SFML_USE_STATIC_STD_LIBS FALSE BOOL "TRUE to statically link to the standard libraries, FALSE to use them as DLLs")
+    set(SFML_USE_STATIC_STD_LIBS FALSE)
 
     # the following combination of flags is not valid
     if (BUILD_SHARED_LIBS AND SFML_USE_STATIC_STD_LIBS)
@@ -255,28 +238,6 @@ if(SFML_BUILD_EXAMPLES)
 endif()
 if(SFML_BUILD_DOC)
     add_subdirectory(doc)
-endif()
-
-# on Linux and BSD-like OS, install pkg-config files by default
-set(SFML_INSTALL_PKGCONFIG_DEFAULT FALSE)
-
-if(SFML_OS_LINUX OR SFML_OS_FREEBSD OR SFML_OS_OPENBSD)
-    set(SFML_INSTALL_PKGCONFIG_DEFAULT TRUE)
-endif()
-
-sfml_set_option(SFML_INSTALL_PKGCONFIG_FILES ${SFML_INSTALL_PKGCONFIG_DEFAULT} BOOL "TRUE to automatically install pkg-config files so other projects can find SFML")
-
-if(SFML_INSTALL_PKGCONFIG_FILES)
-    sfml_set_option(SFML_PKGCONFIG_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/${SFML_PKGCONFIG_DIR}" PATH "Install directory for SFML's pkg-config .pc files")
-
-    foreach(sfml_module IN ITEMS all system window graphics audio network)
-        CONFIGURE_FILE(
-            "tools/pkg-config/sfml-${sfml_module}.pc.in"
-            "tools/pkg-config/sfml-${sfml_module}.pc"
-            @ONLY)
-        INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/tools/pkg-config/sfml-${sfml_module}.pc"
-            DESTINATION "${SFML_PKGCONFIG_INSTALL_PREFIX}")
-    endforeach()
 endif()
 
 # setup the install rules

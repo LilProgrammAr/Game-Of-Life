@@ -1,7 +1,7 @@
-#include "Field.h"
+#include <Field.h>
 #include <SFML/Graphics.hpp>
 
-int main(int argc, const char** argv)
+int main(int argc, char* argv[])
 {
 	sf::RenderWindow window(sf::VideoMode(400, 400), "Game of Life");
 	sf::Event event;
@@ -9,7 +9,7 @@ int main(int argc, const char** argv)
 
 	window.setFramerateLimit(30);
 
-	Field field({ 500, 500 }, 2);
+	Field field({ 50, 50 }, 8);
 	field.init();
 	field.setPosition(0, 0);
 

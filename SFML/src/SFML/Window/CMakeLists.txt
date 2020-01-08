@@ -225,7 +225,7 @@ elseif(SFML_OS_ANDROID)
 endif()
 
 # define the sfml-window target
-add_library(sfml-window SHARED
+sfml_add_library(sfml-window
                  SOURCES ${SRC} ${PLATFORM_SRC})
 target_link_libraries(sfml-window PUBLIC sfml-system)
 
