@@ -1,0 +1,14 @@
+# ninja log v5
+10	1524	600127831	GameOfLife-cmake/CMakeFiles/GameOfLife.dir/main.cpp.obj	68b8fda3e12cc94b
+2	2869	600127833	GameOfLife-cmake/CMakeFiles/GameOfLife.dir/Field.cpp.obj	f835fc06ec2b5597
+2870	3484	600127833	GameOfLife-cmake/GameOfLife.exe	99a3fed900d8234f
+2	346	600127893	build.ninja	312eba43bd2f8b38
+1	228	600127923	build.ninja	312eba43bd2f8b38
+2	246	600128265	build.ninja	312eba43bd2f8b38
+1	238	600128291	build.ninja	312eba43bd2f8b38
+0	15	0	clean	67256af933a03e99
+2	1649	600128310	GameOfLife-cmake/CMakeFiles/GameOfLife.dir/main.cpp.obj	68b8fda3e12cc94b
+7	1781	600128311	GameOfLife-cmake/CMakeFiles/GameOfLife.dir/Field.cpp.obj	f835fc06ec2b5597
+1782	2268	600128311	GameOfLife-cmake/GameOfLife.exe	99a3fed900d8234f
+2	244	600128402	build.ninja	312eba43bd2f8b38
+2	633	600128402	GameOfLife-cmake/GameOfLife.exe	574df21a5dbe8c2d

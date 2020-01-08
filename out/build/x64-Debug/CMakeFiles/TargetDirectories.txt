@@ -1,0 +1,5 @@
+C:/Users/sergs/source/repos/GameOfLife/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+C:/Users/sergs/source/repos/GameOfLife/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
+C:/Users/sergs/source/repos/GameOfLife/out/build/x64-Debug/GameOfLife-cmake/CMakeFiles/edit_cache.dir
+C:/Users/sergs/source/repos/GameOfLife/out/build/x64-Debug/GameOfLife-cmake/CMakeFiles/GameOfLife.dir
+C:/Users/sergs/source/repos/GameOfLife/out/build/x64-Debug/GameOfLife-cmake/CMakeFiles/rebuild_cache.dir
